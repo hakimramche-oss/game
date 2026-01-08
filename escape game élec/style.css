@@ -1,0 +1,975 @@
+:root {
+    --metal-dark: #0f0f11;
+    --metal-light: #3a3a40;
+    --screen-bg: #0d1117;
+    --lcd-glow: rgba(0, 240, 255, 0.1);
+    --led-red: #ff0000;
+    --led-green: #00ff66;
+    --led-orange: #ffaa00;
+    --led-off: #220505;
+    --caution-yellow: #ffcc00;
+    --text-lcd: #00f3ff;
+    --industrial-font: 'Share Tech Mono', monospace;
+    --ui-font: 'Rajdhani', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+    cursor: default;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: #050505;
+    background-image: url('assets/bg.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--ui-font);
+    overflow: hidden;
+}
+
+#vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 40%, #000 120%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* --- DEVICE CASING (The Physical Object) --- */
+#device-casing {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    max-height: 900px;
+    aspect-ratio: 9/7;
+    background:
+        repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 100px, transparent 100px, transparent 200px),
+        linear-gradient(135deg, #3a3a40 0%, #0f0f11 100%);
+    border-radius: 30px;
+    box-shadow:
+        inset 5px 5px 15px rgba(255, 255, 255, 0.05),
+        inset -8px -8px 20px rgba(0, 0, 0, 0.7),
+        0 40px 80px rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    position: relative;
+    border: 3px solid #111;
+    margin: 15px;
+}
+
+@media (max-width: 600px) {
+    #device-casing {
+        border-radius: 0;
+        margin: 0;
+        height: 100vh;
+        max-height: none;
+        aspect-ratio: auto;
+    }
+}
+
+/* HEADER AREA */
+.device-header,
+.device-controls {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: linear-gradient(to bottom, #252528, #1e1e20);
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.device-controls {
+    margin-bottom: 0;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-back-menu {
+    background: #333;
+    border: 1px solid #555;
+    color: #888;
+    font-family: var(--industrial-font);
+    font-size: 0.7rem;
+    padding: 5px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.btn-back-menu:hover {
+    color: #fff;
+    border-color: #777;
+}
+
+.brand-plate {
+    background: #111;
+    color: #fff;
+    padding: 5px 10px;
+    border: 1px solid #555;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to right, #000, #222);
+}
+
+.model-no {
+    font-size: 0.6rem;
+    color: #888;
+    display: block;
+    letter-spacing: 1px;
+}
+
+.screws {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    padding: 0 10px;
+    pointer-events: none;
+}
+
+.screw {
+    width: 12px;
+    height: 12px;
+    background: #555;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2), 1px 1px 1px rgba(0, 0, 0, 0.8);
+    background-image: linear-gradient(45deg, transparent 45%, #222 45%, #222 55%, transparent 55%),
+        linear-gradient(-45deg, transparent 45%, #222 45%, #222 55%, transparent 55%);
+}
+
+.status-group {
+    display: flex;
+    align-items: center;
+}
+
+.led-indicators {
+    display: flex;
+    gap: 10px;
+}
+
+
+.led {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #300;
+    border: 1px solid #100;
+    box-shadow: inset 0 0 2px #000;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.led.on {
+    background: var(--led-red);
+    box-shadow: 0 0 10px var(--led-red), inset 0 0 2px #fff;
+}
+
+#led-power.on {
+    background: var(--led-green);
+    box-shadow: 0 0 10px var(--led-green);
+}
+
+/* --- SCREEN AREA --- */
+#screen-frame {
+    flex: 1;
+    background: #000;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 20px #000;
+    border: 2px solid #333;
+    border-bottom-color: #444;
+    border-right-color: #444;
+}
+
+#screen-glass {
+    width: 100%;
+    height: 100%;
+    background: var(--screen-bg);
+    position: relative;
+    overflow: hidden;
+    color: var(--text-lcd);
+    font-family: var(--industrial-font);
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+}
+
+#transition-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 60;
+    transition: opacity 0.3s;
+}
+
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.scanlines::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(18, 16, 16, 0.03);
+    opacity: 0;
+    z-index: 51;
+    pointer-events: none;
+    animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 0.27861;
+    }
+
+    5% {
+        opacity: 0.34769;
+    }
+
+    10% {
+        opacity: 0.23604;
+    }
+
+    15% {
+        opacity: 0.90626;
+    }
+
+    20% {
+        opacity: 0.18128;
+    }
+
+    25% {
+        opacity: 0.83891;
+    }
+
+    30% {
+        opacity: 0.65583;
+    }
+
+    35% {
+        opacity: 0.57807;
+    }
+
+    40% {
+        opacity: 0.26559;
+    }
+
+    45% {
+        opacity: 0.84693;
+    }
+
+    50% {
+        opacity: 0.96019;
+    }
+
+    55% {
+        opacity: 0.08594;
+    }
+
+    60% {
+        opacity: 0.20313;
+    }
+
+    65% {
+        opacity: 0.71988;
+    }
+
+    70% {
+        opacity: 0.53455;
+    }
+
+    75% {
+        opacity: 0.37288;
+    }
+
+    80% {
+        opacity: 0.71428;
+    }
+
+    85% {
+        opacity: 0.70419;
+    }
+
+    90% {
+        opacity: 0.7003;
+    }
+
+    95% {
+        opacity: 0.36108;
+    }
+
+    100% {
+        opacity: 0.24387;
+    }
+}
+
+/* --- HUD --- */
+#hud-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 40;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 2px solid rgba(170, 221, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.hud-label {
+    font-size: 0.7rem;
+    color: #557;
+    display: block;
+    letter-spacing: 1px;
+}
+
+#timer {
+    font-size: 1.5rem;
+    color: var(--led-red);
+    text-shadow: 0 0 5px var(--led-red);
+}
+
+#level-counter {
+    font-size: 1.5rem;
+    color: var(--text-lcd);
+}
+
+/* --- GAME VIEWS --- */
+#game-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+#result-msg {
+    margin: 20px 0;
+    font-size: 1.3rem;
+    color: #aaa;
+    max-width: 700px;
+    line-height: 1.4;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#menu-view {
+    text-align: center;
+}
+
+.logo-render h1 {
+    font-size: 5.5rem;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    margin: 0;
+    letter-spacing: 5px;
+}
+
+.logo-render p {
+    color: var(--caution-yellow);
+    letter-spacing: 8px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.story-container {
+    text-align: left;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border: 1px solid #444;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    max-width: 800px;
+}
+
+.story-container p {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.story-container strong {
+    color: #fff;
+    color: var(--text-lcd);
+}
+
+.mission-list {
+    text-align: left;
+    color: var(--led-red);
+    font-family: var(--industrial-font);
+    list-style-type: square;
+    margin-bottom: 15px;
+}
+
+#level-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    overflow-y: auto;
+    /* Space for HUD */
+}
+
+#task-instruction {
+    font-size: 2rem;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 20px;
+    border: 1px solid #555;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+}
+
+#puzzle-container {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* --- INDUSTRIAL CONTROLS (BUTTONS) --- */
+.industrial-btn {
+    background: linear-gradient(to bottom, #444, #222);
+    border: 1px solid #000;
+    color: #ddd;
+    font-family: var(--ui-font);
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 15px 40px;
+    box-shadow:
+        inset 1px 1px 0 rgba(255, 255, 255, 0.2),
+        0 4px 6px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.1s;
+}
+
+.industrial-btn:active {
+    background: #222;
+    transform: translateY(2px);
+    box-shadow: inset 1px 1px 5px #000;
+}
+
+.emergency-stop {
+    background: linear-gradient(to bottom, #d00, #900);
+    border: 2px solid #500;
+    width: 60px;
+    height: 60px;
+    /* Square */
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 200, 200, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emergency-stop:active {
+    transform: scale(0.95);
+    background: #800;
+    box-shadow: inset 0 0 5px #000;
+}
+
+/* ================== PUZZLE ELEMENTS ================== */
+
+/* 1. TOGGLE GRID (Fuses) */
+.grid-container {
+    display: grid;
+    gap: 10px;
+}
+
+.fuse-cell {
+    width: 60px;
+    height: 60px;
+    background: #222;
+    border: 2px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px #000;
+}
+
+.fuse-led {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #311;
+    box-shadow: inset 0 0 2px #000;
+    transition: 0.2s;
+}
+
+.fuse-cell.active .fuse-led {
+    background: var(--led-green);
+    box-shadow: 0 0 15px var(--led-green);
+}
+
+/* 2. CABLES (Canvas parent) */
+.cable-stage {
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    position: relative;
+    background: #080808;
+    border: 4px solid #333;
+    border-radius: 4px;
+    box-shadow: inset 0 0 20px #000;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.port-strip {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background: #151515;
+    border-right: 1px solid #333;
+}
+
+.port-strip.right {
+    right: 0;
+    border: none;
+    border-left: 1px solid #333;
+}
+
+.port {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.port:hover {
+    transform: scale(1.2);
+}
+
+.port.selected {
+    background: #fff;
+    box-shadow: 0 0 10px #fff;
+}
+
+/* 3. SLIDERS */
+.slider-group {
+    display: flex;
+    gap: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    width: 90%;
+    padding: 40px;
+}
+
+.slider-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 200px;
+}
+
+.slider-track {
+    flex: 1;
+    width: 10px;
+    background: #222;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: inset 0 0 5px #000;
+}
+
+input[type=range].vertical {
+    writing-mode: bt-lr;
+    /* IE/Edge */
+    -webkit-appearance: slider-vertical;
+    appearance: slider-vertical;
+    /* Webkit */
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    cursor: ns-resize;
+}
+
+.slider-val {
+    margin-top: 10px;
+    font-family: monospace;
+    color: var(--text-lcd);
+}
+
+.target-line {
+    position: absolute;
+    left: -10px;
+    right: -10px;
+    height: 2px;
+    background: var(--led-green);
+    z-index: 5;
+    pointer-events: none;
+    box-shadow: 0 0 5px var(--led-green);
+}
+
+/* 4. KEYPAD */
+.keypad-frame {
+    background: #1b1b1e;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+}
+
+.keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.kp-btn {
+    width: 80px;
+    height: 70px;
+    background: #252528;
+    color: #fff;
+    border: 1px solid #000;
+    box-shadow: 0 3px 0 #000;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-family: var(--industrial-font);
+}
+
+.kp-btn:active {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+
+.kp-screen {
+    width: 250px;
+    background: #000;
+    border: 1px solid #444;
+    color: var(--led-green);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 5px;
+}
+
+.kp-note {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: #ffeb3b;
+    color: #000;
+    padding: 5px;
+    font-weight: bold;
+    transform: rotate(3deg);
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* 5. VALVE (Rotary) */
+.valve-container {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    background: radial-gradient(circle, #333 30%, #111 70%);
+    border-radius: 50%;
+    box-shadow: 0 10px 20px #000;
+    border: 4px solid #444;
+}
+
+.valve-handle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: grab;
+    transition: transform 0.1s;
+}
+
+.valve-bar {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: #666;
+    margin-top: -10px;
+    box-shadow: inset 0 0 5px #000;
+}
+
+.valve-bar.cross {
+    transform: rotate(90deg);
+}
+
+.valve-marker {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: red;
+    margin-left: -5px;
+    border-radius: 50%;
+}
+
+.valve-target {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--led-green);
+    font-size: 2rem;
+}
+
+/* 6. SYMBOL STREAM */
+.stream-container {
+    display: flex;
+    gap: 10px;
+}
+
+.symbol-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+    background: #000;
+    border: 2px solid var(--text-lcd);
+    color: var(--text-lcd);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.symbol-btn:hover {
+    background: var(--text-lcd);
+    color: #000;
+}
+
+.sequence-display {
+    position: absolute;
+    top: 100px;
+    font-size: 3rem;
+    color: #fff;
+    letter-spacing: 20px;
+}
+
+
+
+/* RESPONSIVE TWEAKS */
+@media (max-width: 800px) {
+    .device-header {
+        height: 50px;
+        padding: 0 10px;
+    }
+
+    .brand-plate {
+        font-size: 0.9rem;
+    }
+
+    .industrial-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .grid-container {
+        gap: 5px;
+    }
+
+    .fuse-cell {
+        width: 45px;
+        height: 45px;
+    }
+
+    .keypad-frame {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #timer {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        background-size: 10px 10px;
+    }
+
+    .slider-group {
+        padding: 10px;
+        width: 95%;
+        gap: 10px;
+    }
+
+    .slider-col {
+        height: 150px;
+    }
+
+    .valve-container {
+        width: 150px;
+        height: 150px;
+    }
+
+
+}
+
+/* Sound Control */
+#audio-settings-container {
+    position: relative;
+    margin-left: 15px;
+}
+
+.sound-btn {
+    background: #222;
+    border: 2px solid #555;
+    color: var(--led-green);
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+}
+
+#audio-submenu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: #1a1a1c;
+    border: 2px solid #555;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1000;
+    width: 150px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#audio-submenu.hidden {
+    display: none;
+}
+
+.submenu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #aaa;
+    font-family: var(--industrial-font);
+    font-size: 0.8rem;
+}
+
+.mini-toggle {
+    background: #333;
+    border: 1px solid #555;
+    color: var(--led-green);
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-family: var(--ui-font);
+    border-radius: 2px;
+}
+
+.mini-toggle.off {
+    color: var(--led-red);
+    border-color: #833;
+    background: #200;
+}
+
+.sound-btn:hover {
+    border-color: var(--led-green);
+    box-shadow: 0 0 10px var(--led-green);
+}
+
+.sound-btn:active {
+    transform: scale(0.95);
+}
+
+.sound-btn.muted {
+    color: #555;
+    border-color: #333;
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELECTRANOVA: SYSTEM CHECK</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Background Industrial Environment -->
+    <div id="metal-bg"></div>
+    <div id="vignette"></div>
+
+    <!-- Main Device Container -->
+    <main id="device-casing">
+
+        <!-- Status Header (Top of the physical device) -->
+        <div class="device-header">
+            <div class="brand-plate">
+                <span>ELECTRANOVA</span>
+                <span class="model-no">IND-2026-X</span>
+            </div>
+            <div class="screws">
+                <div class="screw"></div>
+                <div class="screw"></div>
+            </div>
+            <div class="status-group">
+                <div class="led-indicators">
+                    <div class="led" id="led-power"></div>
+                    <div class="led" id="led-warning"></div>
+                    <div class="led" id="led-data"></div>
+                </div>
+                <div id="audio-settings-container">
+                    <button id="sound-toggle" class="sound-btn" title="Paramètres Audio">
+                        <span id="sound-icon">🔊</span>
+                    </button>
+                    <div id="audio-submenu" class="hidden">
+                        <div class="submenu-item">
+                            <span>MUSIQUE</span>
+                            <button id="music-mute-btn" class="mini-toggle" title="Mute Musique">ON</button>
+                        </div>
+                        <div class="submenu-item">
+                            <span>EFFETS</span>
+                            <button id="sfx-mute-btn" class="mini-toggle" title="Mute SFX">ON</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Screen/Interface -->
+        <div id="screen-frame">
+            <div id="screen-glass">
+                <div class="scanlines"></div>
+                <div id="transition-overlay" class="hidden"></div>
+
+                <!-- HUD Overlay (In-screen) -->
+                <div id="hud-overlay" class="hidden">
+                    <div class="hud-top">
+                        <div class="level-box">
+                            <span class="hud-label">SÉQUENCE</span>
+                            <span id="level-counter">01/20</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="hud-label">T-MINUS</span>
+                            <span id="timer">05:00.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Content Container -->
+                <div id="game-stage">
+
+                    <!-- MENU -->
+                    <div id="menu-view" class="active">
+                        <div class="logo-render">
+                            <h1>ELECTRANOVA</h1>
+                            <p class="blink">DÉBLOQUE TON POTENTIEL</p>
+                        </div>
+                        <div class="story-container">
+                            <p>Tu n'y connais rien en électricité ? <strong>Tant mieux !</strong></p>
+                            <p>L'usine du futur a besoin de nouveaux talents. Pas besoin de diplôme pour sauver le
+                                monde, juste de ta logique.</p>
+                            <p>Ta mission :</p>
+                            <ul class="mission-list">
+                                <li><strong>TESTE</strong> tes réflexes</li>
+                                <li><strong>DÉCOUVRE</strong> des technologies cool</li>
+                                <li><strong>SAUVE</strong> la situation</li>
+                            </ul>
+                            <p>Prêt à voir si tu as l'étincelle ?</p>
+                        </div>
+                        <div class="menu-info">
+                            <p>DURÉE : 5 MINUTES FUN | 20 NIVEAUX</p>
+                        </div>
+                        <button id="start-btn" class="industrial-btn">DÉMARRER MA MISSION</button>
+                    </div>
+
+                    <!-- DYNAMIC LEVEL CONTAINER -->
+                    <div id="level-view" class="hidden">
+                        <h2 id="task-instruction">INSTRUCTION HERE</h2>
+                        <div id="puzzle-container"></div>
+                    </div>
+
+                    <!-- SUCCESS/FAIL SCREEN -->
+                    <div id="result-view" class="hidden">
+                        <h1 id="result-title">STATUS</h1>
+                        <div id="result-msg">...</div>
+                        <button id="retry-btn" class="industrial-btn">REDÉMARRER</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Physical Controls (Bottom) -->
+        <div class="device-controls">
+            <button id="back-menu-btn" class="btn-back-menu hidden">MENU PRINCIPAL</button>
+            <div class="screws">
+                <div class="screw"></div>
+                <div class="screw"></div>
+            </div>
+            <button id="abort-btn" class="emergency-stop">
+                <span>STOP</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Audio Elements -->
+    <audio id="bg-music" src="assets/ambient.mp3" loop></audio>
+    <audio id="sfx-success" src="assets/success.mp3"></audio>
+    <audio id="sfx-fail" src="assets/fail.mp3"></audio>
+    <audio id="sfx-click" src="assets/click.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
